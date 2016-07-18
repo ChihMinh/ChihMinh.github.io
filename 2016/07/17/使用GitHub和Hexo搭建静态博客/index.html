@@ -84,16 +84,22 @@
 
 
 
-<meta name="description" content="日后填坑">
+<meta name="description" content="前言本来想自己用java web搭建一个博客，奈何前端不熟，写前端比较费事，只得暂停任务。听闻可以用GitHub和Hexo搭建静态博客，遂在周末尝试，网上资料多而全面，搭建基本无障碍。Hexo的原理就把本地写好的博客弄成静态网页（html），然后利用Git提交到远程仓库。
+准备配置Git暂略
+配置Node.jsWindows配置Node.js环境下载Node.js安装文件：-Windows Ins">
 <meta property="og:type" content="article">
-<meta property="og:title" content="搭建静态博客站">
-<meta property="og:url" content="http://yoursite.com/2016/07/17/搭建静态博客站/index.html">
+<meta property="og:title" content="使用GitHub和Hexo搭建静态博客">
+<meta property="og:url" content="http://yoursite.com/2016/07/17/使用GitHub和Hexo搭建静态博客/index.html">
 <meta property="og:site_name" content="云在青山水在瓶">
-<meta property="og:description" content="日后填坑">
-<meta property="og:updated_time" content="2016-07-17T10:39:42.001Z">
+<meta property="og:description" content="前言本来想自己用java web搭建一个博客，奈何前端不熟，写前端比较费事，只得暂停任务。听闻可以用GitHub和Hexo搭建静态博客，遂在周末尝试，网上资料多而全面，搭建基本无障碍。Hexo的原理就把本地写好的博客弄成静态网页（html），然后利用Git提交到远程仓库。
+准备配置Git暂略
+配置Node.jsWindows配置Node.js环境下载Node.js安装文件：-Windows Ins">
+<meta property="og:updated_time" content="2016-07-17T16:02:04.657Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="搭建静态博客站">
-<meta name="twitter:description" content="日后填坑">
+<meta name="twitter:title" content="使用GitHub和Hexo搭建静态博客">
+<meta name="twitter:description" content="前言本来想自己用java web搭建一个博客，奈何前端不熟，写前端比较费事，只得暂停任务。听闻可以用GitHub和Hexo搭建静态博客，遂在周末尝试，网上资料多而全面，搭建基本无障碍。Hexo的原理就把本地写好的博客弄成静态网页（html），然后利用Git提交到远程仓库。
+准备配置Git暂略
+配置Node.jsWindows配置Node.js环境下载Node.js安装文件：-Windows Ins">
 
 
 
@@ -114,9 +120,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/07/17/搭建静态博客站/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/07/17/使用GitHub和Hexo搭建静态博客/"/>
 
-  <title> 搭建静态博客站 | 云在青山水在瓶 </title>
+  <title> 使用GitHub和Hexo搭建静态博客 | 云在青山水在瓶 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -256,7 +262,7 @@
             
             
               
-                搭建静态博客站
+                使用GitHub和Hexo搭建静态博客
               
             
           </h1>
@@ -268,7 +274,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-17T17:07:20+08:00" content="2016-07-17">
+            <time itemprop="dateCreated" datetime="2016-07-17T19:11:19+08:00" content="2016-07-17">
               2016-07-17
             </time>
           </span>
@@ -296,7 +302,20 @@
       
 
       
-        <p>日后填坑</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本来想自己用java web搭建一个博客，奈何前端不熟，写前端比较费事，只得暂停任务。听闻可以用GitHub和Hexo搭建静态博客，遂在周末尝试，网上资料多而全面，搭建基本无障碍。Hexo的原理就把本地写好的博客弄成静态网页（html），然后利用Git提交到远程仓库。</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="配置Git"><a href="#配置Git" class="headerlink" title="配置Git"></a>配置Git</h3><p>暂略</p>
+<h3 id="配置Node-js"><a href="#配置Node-js" class="headerlink" title="配置Node.js"></a>配置Node.js</h3><p>Windows配置Node.js环境<br>下载Node.js安装文件：<br>-<a href="https://nodejs.org/dist/v4.2.3/node-v4.2.3-x86.msi" target="_blank" rel="external">Windows Installer 32-bit</a><br>-[Windows Installer 64-bit(<a href="https://nodejs.org/dist/v4.2.3/node-v4.2.3-x64.msi" target="_blank" rel="external">https://nodejs.org/dist/v4.2.3/node-v4.2.3-x64.msi</a>)<br>下载对应安装文件直接安装即可，安装完了以后在命令行窗口输入<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">node -v</div><div class="line">npm -v</div></pre></td></tr></table></figure></p>
+<p>如果安装无误那么会出现相应版本信息</p>
+<h3 id="配置Hexo"><a href="#配置Hexo" class="headerlink" title="配置Hexo"></a>配置Hexo</h3><p><a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="external">官方中文文档</a>很详细，只说一下关键的。  </p>
+<p>####安装Hexo<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g hexo-cli</div></pre></td></tr></table></figure></p>
+<p>之后输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo -v</div></pre></td></tr></table></figure></p>
+<p>如果成功会出现下面信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">hexo-cli: 1.0.2</div><div class="line">os: Windows_NT 10.0.10586 win32 x64</div><div class="line">http_parser: 2.5.2</div><div class="line">node: 4.4.7</div><div class="line">v8: 4.5.103.36</div><div class="line">uv: 1.8.0</div><div class="line">zlib: 1.2.8</div><div class="line">ares: 1.10.1-DEV</div><div class="line">icu: 56.1</div><div class="line">modules: 46</div><div class="line">openssl: 1.0.2h</div></pre></td></tr></table></figure></p>
+<p>然后输入下面的命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install hexo --save</div></pre></td></tr></table></figure></p>
+<p>####建站<br>在指定目录中输入下面命令，会在下面目录中拷贝所需文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">hexo init &lt;folder&gt;</div><div class="line">cd &lt;folder&gt;</div><div class="line">npm install</div></pre></td></tr></table></figure></p>
+<p>####服务器<br>生成静态文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo g</div></pre></td></tr></table></figure></p>
+<p>开启本地服务，输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo s</div></pre></td></tr></table></figure></p>
+<p>在浏览器输入<a href="http://localhost:4000/即可访问" target="_blank" rel="external">http://localhost:4000/即可访问</a><br>不过WIN10打不开，更改端口号之后可以访问，原因可能是端口号被占用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo s -p 3600</div></pre></td></tr></table></figure></p>
+<h2 id="使用GitHub-Pages服务"><a href="#使用GitHub-Pages服务" class="headerlink" title="使用GitHub Pages服务"></a>使用GitHub Pages服务</h2><p>创建一个新的Repository，项目名为yourname.github.io，“yourname”必须是你的用户名，设为public。选中该Repository，在上面的菜单栏选中Settings，拉到下面，点击“Launch automatic page generator”，选择一个合适的主题，点击“ublish page”按钮，可能需要等几分钟，然后就能访问<a href="https://yourname.github.io了。" target="_blank" rel="external">https://yourname.github.io了。</a><br>之后你只需要把Hexo生成的静态文件提交到该仓库即可。</p>
 
       
     </div>
@@ -425,7 +444,7 @@
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备"><span class="nav-number">2.</span> <span class="nav-text">准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Git"><span class="nav-number">2.1.</span> <span class="nav-text">配置Git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Node-js"><span class="nav-number">2.2.</span> <span class="nav-text">配置Node.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Hexo"><span class="nav-number">2.3.</span> <span class="nav-text">配置Hexo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用GitHub-Pages服务"><span class="nav-number">3.</span> <span class="nav-text">使用GitHub Pages服务</span></a></li></ol></div>
             
           </div>
         </section>
