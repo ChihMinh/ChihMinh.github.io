@@ -90,12 +90,12 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Git管理项目">
 <meta property="og:url" content="http://yoursite.com/2016/07/19/使用Git管理项目/index.html">
-<meta property="og:site_name" content="云在青山水在瓶">
+<meta property="og:site_name" content="天明">
 <meta property="og:description" content="将项目chatroom push到GitHub仓库中去。Git文件有三种状态，已修改、已暂存、已提交，Git工作流程：a. 在工作目录中修改某些文件。b. 对修改后的文件进行快照，然后保存到暂存区域。c. 提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中。git的本地操作如下图：
 1. 初始化本地仓库在工作目录（即项目目录）中初始化新的本地仓库，执行
 12$ git initInit">
 <meta property="og:image" content="http://yoursite.com/images/localoperation.png">
-<meta property="og:updated_time" content="2016-07-19T11:24:23.137Z">
+<meta property="og:updated_time" content="2016-07-21T11:05:54.499Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Git管理项目">
 <meta name="twitter:description" content="将项目chatroom push到GitHub仓库中去。Git文件有三种状态，已修改、已暂存、已提交，Git工作流程：a. 在工作目录中修改某些文件。b. 对修改后的文件进行快照，然后保存到暂存区域。c. 提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中。git的本地操作如下图：
@@ -124,7 +124,7 @@
 
   <link rel="canonical" href="http://yoursite.com/2016/07/19/使用Git管理项目/"/>
 
-  <title> 使用Git管理项目 | 云在青山水在瓶 </title>
+  <title> 使用Git管理项目 | 天明 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -155,7 +155,7 @@
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">云在青山水在瓶</span>
+      <span class="site-title">天明</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -285,6 +285,13 @@
 
           
             
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/19/使用Git管理项目/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/19/使用Git管理项目/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -318,8 +325,8 @@
 <p>出错原因：之前已经用Eclipse提交过一次到该远程仓库，所以需要先pull到本地仓库，合并之后再push</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ git pull chatroom master</div><div class="line">From github.com:ChihMinh/chatroom</div><div class="line"> * branch            master     -&gt; FETCH_HEAD</div><div class="line">Already up-to-date!</div><div class="line">Merge made by the <span class="string">'recursive'</span> strategy.</div></pre></td></tr></table></figure>
 <p>注：Pull = fetch + merge再次push，结果ok<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ git push chatroom master</div><div class="line">Counting objects: 170, done.</div><div class="line">Delta compression using up to 4 threads.</div><div class="line">Compressing objects: 100% (148/148), done.</div><div class="line">Writing objects: 100% (170/170), 3.81 MiB | 392.00 KiB/s, done.</div><div class="line">Total 170 (delta 13), reused 0 (delta 0)</div><div class="line">To git@github.com:ChihMinh/chatroom.git</div><div class="line">    808459b..2d9b8a2  master -&gt; master</div></pre></td></tr></table></figure></p>
-<h2 id="5-修改后提交"><a href="#5-修改后提交" class="headerlink" title="5. 修改后提交"></a>5. 修改后提交</h2><p>新增REDME.md文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ git status</div><div class="line">On branch master</div><div class="line">Untracked files:</div><div class="line">(use <span class="string">"git add &lt;file&gt;..."</span> to include <span class="keyword">in</span> what will be committed)</div><div class="line">    </div><div class="line">        README.md</div><div class="line">    </div><div class="line">nothing added to commit but untracked files present (use <span class="string">"git add"</span> to track)</div></pre></td></tr></table></figure></p>
-<p>把该文件加入跟踪<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ git add README.md</div><div class="line">$ git status</div><div class="line">On branch master</div><div class="line">Changes to be committed:</div><div class="line">  (use <span class="string">"git reset HEAD &lt;file&gt;..."</span> to unstage)</div><div class="line"></div><div class="line">        new file:   README.md</div></pre></td></tr></table></figure></p>
+<h2 id="5-修改后提交"><a href="#5-修改后提交" class="headerlink" title="5. 修改后提交"></a>5. 修改后提交</h2><p>新增README.md文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ git status</div><div class="line">On branch master</div><div class="line">Untracked files:</div><div class="line">(use <span class="string">"git add &lt;file&gt;..."</span> to include <span class="keyword">in</span> what will be committed)</div><div class="line">    </div><div class="line">        README.md</div><div class="line">    </div><div class="line">nothing added to commit but untracked files present (use <span class="string">"git add"</span> to track)</div></pre></td></tr></table></figure></p>
+<p>跟踪该文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ git add README.md</div><div class="line">$ git status</div><div class="line">On branch master</div><div class="line">Changes to be committed:</div><div class="line">  (use <span class="string">"git reset HEAD &lt;file&gt;..."</span> to unstage)</div><div class="line"></div><div class="line">        new file:   README.md</div></pre></td></tr></table></figure></p>
 <p>（说明该文件已加入暂存区，直接提交即可）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ git commit -m <span class="string">"new add readme.md"</span></div><div class="line">[master 43e3a92] new add readme.md</div><div class="line"> 1 file changed, 1 insertion(+)</div><div class="line"> create mode 100644 README.md    </div><div class="line">$ git status</div><div class="line">On branch master</div><div class="line">nothing to commit, working directory clean</div></pre></td></tr></table></figure></p>
 <p>修改README.md文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ git status</div><div class="line">On branch master</div><div class="line">Changes not staged <span class="keyword">for</span> commit:</div><div class="line">  (use <span class="string">"git add &lt;file&gt;..."</span> to update what will be committed)</div><div class="line">  (use <span class="string">"git checkout -- &lt;file&gt;..."</span> to discard changes <span class="keyword">in</span> working directory)</div><div class="line">    </div><div class="line">        modified:   README.md</div><div class="line">    </div><div class="line">no changes added to commit (use <span class="string">"git add"</span> and/or <span class="string">"git commit -a"</span>)</div></pre></td></tr></table></figure></p>
 <p>（上述说明修改文件尚未加入暂存区域）<br>把已修改文件加入暂存区域<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ git add README.md</div><div class="line">$ git status</div><div class="line">On branch master</div><div class="line">Changes to be committed:</div><div class="line">    (use <span class="string">"git reset HEAD &lt;file&gt;..."</span> to unstage)</div><div class="line">    </div><div class="line">        modified:   README.md</div></pre></td></tr></table></figure></p>
@@ -382,6 +389,10 @@
           
   <div class="comments" id="comments">
     
+      <div class="ds-thread" data-thread-key="2016/07/19/使用Git管理项目/"
+           data-title="使用Git管理项目" data-url="http://yoursite.com/2016/07/19/使用Git管理项目/">
+      </div>
+    
   </div>
 
 
@@ -417,8 +428,8 @@
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/header.jpg"
-               alt="chihminh" />
-          <p class="site-author-name" itemprop="name">chihminh</p>
+               alt="ChihMinh" />
+          <p class="site-author-name" itemprop="name">ChihMinh</p>
           <p class="site-description motion-element" itemprop="description">Personal blog.</p>
         </div>
         <nav class="site-state motion-element">
@@ -490,7 +501,7 @@
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">chihminh</span>
+  <span class="author" itemprop="copyrightHolder">ChihMinh</span>
 </div>
 
 <div class="powered-by">
@@ -581,9 +592,30 @@
 
   
 
+  
+    
+  
 
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"chihminh"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
 
   
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
 
 
 
