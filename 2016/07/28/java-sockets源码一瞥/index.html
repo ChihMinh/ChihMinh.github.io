@@ -1,0 +1,682 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,socket," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言一个IP地址和一个端口号称为一个套接字（socket）。此术语出现在最早的TCP规范（RFC793, Page 5）中，后来也作为伯克利版的编程接口。Berkeley套接字应用程序接口形成了事实上的网络套接字的标准精髓,以下列表是一个Berkeley套接字API库提供的函数或者方法的概要:
+
+socket() 创建一个新的确定类型的套接字，类型用一个整型数值标识（文件描述符），并为它分配系统资">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java sockets源码一瞥">
+<meta property="og:url" content="http://yoursite.com/2016/07/28/java-sockets源码一瞥/index.html">
+<meta property="og:site_name" content="天明">
+<meta property="og:description" content="前言一个IP地址和一个端口号称为一个套接字（socket）。此术语出现在最早的TCP规范（RFC793, Page 5）中，后来也作为伯克利版的编程接口。Berkeley套接字应用程序接口形成了事实上的网络套接字的标准精髓,以下列表是一个Berkeley套接字API库提供的函数或者方法的概要:
+
+socket() 创建一个新的确定类型的套接字，类型用一个整型数值标识（文件描述符），并为它分配系统资">
+<meta property="og:image" content="http://yoursite.com/images/socket.png">
+<meta property="og:image" content="http://yoursite.com/images/socketimpl.png">
+<meta property="og:updated_time" content="2016-07-28T03:16:43.220Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java sockets源码一瞥">
+<meta name="twitter:description" content="前言一个IP地址和一个端口号称为一个套接字（socket）。此术语出现在最早的TCP规范（RFC793, Page 5）中，后来也作为伯克利版的编程接口。Berkeley套接字应用程序接口形成了事实上的网络套接字的标准精髓,以下列表是一个Berkeley套接字API库提供的函数或者方法的概要:
+
+socket() 创建一个新的确定类型的套接字，类型用一个整型数值标识（文件描述符），并为它分配系统资">
+<meta name="twitter:image" content="http://yoursite.com/images/socket.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6309728711868417000,
+      author: '博主大人'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/07/28/java-sockets源码一瞥/"/>
+
+  <title> java sockets源码一瞥 | 天明 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">天明</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                java sockets源码一瞥
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-28T11:09:11+08:00" content="2016-07-28">
+              2016-07-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java基础/" itemprop="url" rel="index">
+                    <span itemprop="name">Java基础</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/28/java-sockets源码一瞥/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/28/java-sockets源码一瞥/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>一个IP地址和一个端口号称为一个套接字（socket）。此术语出现在最早的TCP规范（<a href="https://tools.ietf.org/html/rfc793" target="_blank" rel="external">RFC793</a>, Page 5）中，后来也作为<a href="https://zh.wikipedia.org/wiki/Berkeley%E5%A5%97%E6%8E%A5%E5%AD%97" target="_blank" rel="external">伯克利版的编程接口</a>。Berkeley套接字应用程序接口形成了事实上的网络套接字的标准精髓,以下列表是一个Berkeley套接字API库提供的函数或者方法的概要:</p>
+<ul>
+<li>socket() 创建一个新的确定类型的套接字，类型用一个整型数值标识（文件描述符），并为它分配系统资源。</li>
+<li>bind() 一般用于服务器端，将一个套接字与一个套接字地址结构相关联，比如，一个指定的本地端口和IP地址。</li>
+<li>listen() 用于服务器端，使一个绑定的TCP套接字进入监听状态。</li>
+<li>connect() 用于客户端，为一个套接字分配一个自由的本地端口号。 如果是TCP套接字的话，它会试图获得一个新的TCP连接。</li>
+<li>accept() 用于服务器端。 它接受一个从远端客户端发出的创建一个新的TCP连接的接入请求，创建一个新的套接字，与该连接相应的套接字地址相关联。</li>
+<li>send()和recv(),或者write()和read(),或者recvfrom()和sendto(), 用于往/从远程套接字发送和接受数据。</li>
+<li>close() 用于系统释放分配给一个套接字的资源。 如果是TCP，连接会被中断。<br>gethostbyname()和gethostbyaddr() 用于解析主机名和地址。</li>
+<li>select() 用于修整有如下情况的套接字列表： 准备读，准备写或者是有错误。</li>
+<li>poll() 用于检查套接字的状态。 套接字可以被测试，看是否可以写入、读取或是有错误。</li>
+<li>getsockopt() 用于查询指定的套接字一个特定的套接字选项的当前值。</li>
+<li>setsockopt() 用于为指定的套接字设定一个特定的套接字选项。</li>
+</ul>
+<p>Java sockets使用了伯克利套接字接口。</p>
+<h2 id="Java-sockets源码分析"><a href="#Java-sockets源码分析" class="headerlink" title="Java sockets源码分析"></a>Java sockets源码分析</h2><h3 id="Socket和ServerSocket"><a href="#Socket和ServerSocket" class="headerlink" title="Socket和ServerSocket"></a>Socket和ServerSocket</h3><p>Socket、ServerSocket、SocketImplFactory类图如下：<br><img src="/images/socket.png" alt=""><br>Socket和ServerSocket都是通过SocketImpl实现的，二者很相似，这里只分析Socket<br>创建一个未连接的socket，使用系统默认的SocketImpl<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">Socket</span><span class="params">()</span> </span>&#123;</div><div class="line">    setImpl();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>创建一个未连接的socket，用户指定SocketImpl<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="title">Socket</span><span class="params">(SocketImpl impl)</span> <span class="keyword">throws</span> SocketException </span>&#123;</div><div class="line">    <span class="keyword">this</span>.impl = impl;</div><div class="line">    <span class="keyword">if</span> (impl != <span class="keyword">null</span>) &#123;</div><div class="line">        checkOldImpl();</div><div class="line">        <span class="keyword">this</span>.impl.setSocket(<span class="keyword">this</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>再来看setImpl方法，默认使用SocksSocketImpl类，也可以使用工厂方法来设置<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">setImpl</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (factory != <span class="keyword">null</span>) &#123;</div><div class="line">        impl = factory.createSocketImpl();</div><div class="line">        checkOldImpl();</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// No need to do a checkOldImpl() here, we know it's an up to date</span></div><div class="line">        <span class="comment">// SocketImpl!</span></div><div class="line">        impl = <span class="keyword">new</span> SocksSocketImpl();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (impl != <span class="keyword">null</span>)</div><div class="line">        impl.setSocket(<span class="keyword">this</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>connect方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">(SocketAddress endpoint, <span class="keyword">int</span> timeout)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">    <span class="comment">// 省略部分代码</span></div><div class="line">    <span class="keyword">if</span> (!created)</div><div class="line">        createImpl(<span class="keyword">true</span>);</div><div class="line">    <span class="keyword">if</span> (!oldImpl)</div><div class="line">        impl.connect(epoint, timeout);</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (timeout == <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">if</span> (epoint.isUnresolved())</div><div class="line">            impl.connect(addr.getHostName(), port);</div><div class="line">        <span class="keyword">else</span></div><div class="line">            impl.connect(addr, port);</div><div class="line">    &#125; <span class="keyword">else</span></div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(<span class="string">"SocketImpl.connect(addr, timeout)"</span>);</div><div class="line">    connected = <span class="keyword">true</span>;</div><div class="line">    <span class="comment">/*</span></div><div class="line">     * If the socket was not bound before the connect, it is now because</div><div class="line">     * the kernel will have picked an ephemeral port &amp; a local address</div><div class="line">     */</div><div class="line">    bound = <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可见Socket的connect方法是用SocketImpl的connect方法实现的，再看看close方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">    <span class="keyword">synchronized</span>(closeLock) &#123;</div><div class="line">        <span class="keyword">if</span> (isClosed())</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        <span class="keyword">if</span> (created)</div><div class="line">            impl.close();</div><div class="line">        closed = <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>通过查看源代码也很容易分析其他方法是怎样实现的。</p>
+<h3 id="SocketImpl的类图"><a href="#SocketImpl的类图" class="headerlink" title="SocketImpl的类图"></a>SocketImpl的类图</h3><p><img src="/images/socketimpl.png" alt="">  </p>
+<h2 id="socket-实现客户端与服务端通信"><a href="#socket-实现客户端与服务端通信" class="headerlink" title="socket 实现客户端与服务端通信"></a>socket 实现客户端与服务端通信</h2><p>客户端程序：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SocketClient</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line"></div><div class="line">            <span class="comment">// 客户端与指定主机名和端口的服务端绑定</span></div><div class="line">            Socket socket = <span class="keyword">new</span> Socket(<span class="string">"127.0.0.1"</span>, <span class="number">3600</span>);</div><div class="line">            System.out.println(<span class="string">"连接成功"</span>);</div><div class="line"></div><div class="line">            <span class="comment">// 由socket对象得到输出流</span></div><div class="line">            PrintWriter printer = <span class="keyword">new</span> PrintWriter(socket.getOutputStream());</div><div class="line"></div><div class="line">            <span class="comment">// 由socket对象得到输入流，并将输入字节流转换为字符流</span></div><div class="line">            BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(socket.getInputStream()));</div><div class="line">            <span class="comment">// 读取输入流的一行数据</span></div><div class="line"></div><div class="line">            String res = <span class="string">""</span>;</div><div class="line">            String in = <span class="string">""</span>;</div><div class="line">            <span class="keyword">while</span> (!res.contains(<span class="string">"bye"</span>) &amp;&amp; !in.contains(<span class="string">"bye"</span>)) &#123;</div><div class="line">                <span class="comment">// 读取系统输入，将其从字节流准换位字符流</span></div><div class="line">                BufferedReader sysin = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</div><div class="line">                in = sysin.readLine();</div><div class="line">                printer.println(in);</div><div class="line">                <span class="comment">// 刷新输出流，使服务端马上收到字符串</span></div><div class="line">                printer.flush();</div><div class="line"></div><div class="line">                res = reader.readLine();</div><div class="line">                System.out.println(<span class="string">"Server says: "</span> + res);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            System.out.println(<span class="string">"连接关闭"</span>);</div><div class="line">            printer.close();</div><div class="line">            reader.close();</div><div class="line">            socket.close();</div><div class="line"></div><div class="line"></div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>服务端程序：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SocketServer</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">       <span class="keyword">try</span> &#123;</div><div class="line">           ServerSocket server = <span class="keyword">new</span> ServerSocket(<span class="number">3600</span>);</div><div class="line"></div><div class="line">           <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">               Socket client = server.accept();</div><div class="line">               System.out.println(<span class="string">"连接成功"</span>);</div><div class="line"></div><div class="line">               PrintWriter writer = <span class="keyword">new</span> PrintWriter(client.getOutputStream());</div><div class="line">               BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(client.getInputStream()));</div><div class="line">               String res = <span class="string">""</span>;</div><div class="line">               String in = <span class="string">""</span>;</div><div class="line">               <span class="keyword">while</span> (!res.contains(<span class="string">"bye"</span>) &amp;&amp; !in.contains(<span class="string">"bye"</span>)) &#123;</div><div class="line">                   res = reader.readLine();</div><div class="line">                   System.out.println(<span class="string">"Client says: "</span> + res);</div><div class="line"></div><div class="line">                   BufferedReader sysIn = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</div><div class="line">                   in = sysIn.readLine();</div><div class="line">                   writer.println(in);</div><div class="line">                   writer.flush();</div><div class="line">               &#125;</div><div class="line"></div><div class="line">               System.out.println(<span class="string">"连接关闭"</span>);</div><div class="line">               reader.close();</div><div class="line">               writer.close();</div><div class="line">               client.close();</div><div class="line">           &#125;</div><div class="line"></div><div class="line"></div><div class="line">       &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">           e.printStackTrace();</div><div class="line">       &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这样同一时刻只能有一个客户端和服务端通信，下面用并发实现多个客户端同时与服务端通信。</p>
+<h2 id="多个客户端与服务端通信"><a href="#多个客户端与服务端通信" class="headerlink" title="多个客户端与服务端通信"></a>多个客户端与服务端通信</h2><p>客户端代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SocketClient</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="comment">//</span></div><div class="line">            Socket socket = <span class="keyword">new</span> Socket(<span class="string">"127.0.0.1"</span>, <span class="number">3600</span>);</div><div class="line">            System.out.println(<span class="string">"与服务端连接成功！"</span>);</div><div class="line">            <span class="comment">// 得到输出流</span></div><div class="line">            PrintWriter writer = <span class="keyword">new</span> PrintWriter(socket.getOutputStream());</div><div class="line">            <span class="comment">// 得到输入流</span></div><div class="line">            BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(socket.getInputStream()));</div><div class="line"></div><div class="line"></div><div class="line">            String output = <span class="string">""</span>;</div><div class="line">            String input = <span class="string">""</span>;</div><div class="line">            <span class="comment">// 通信</span></div><div class="line">            <span class="keyword">while</span> (!output.contains(<span class="string">"bye"</span>) &amp;&amp; !input.contains(<span class="string">"bye"</span>)) &#123;</div><div class="line">                System.out.print(<span class="string">"Me: "</span>);</div><div class="line">                <span class="comment">// 从控制台输入</span></div><div class="line">                BufferedReader sysIn = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</div><div class="line">                output = sysIn.readLine();</div><div class="line">                writer.println(output);</div><div class="line">                writer.flush();</div><div class="line"></div><div class="line">                input = reader.readLine();</div><div class="line">                System.out.println(<span class="string">"Server: "</span> + input);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="comment">// 关闭socket对象</span></div><div class="line">            writer.close();</div><div class="line">            reader.close();</div><div class="line">            socket.close();</div><div class="line">            System.out.println(<span class="string">"与服务端连接断开！"</span>);</div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;&#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>服务端代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Socket socket;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ServerThread</span><span class="params">(Socket socket)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.socket = socket;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Socket socket)</span> <span class="keyword">throws</span> IOException</span>&#123;</div><div class="line">        BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(socket.getInputStream()));</div><div class="line">        PrintWriter writer = <span class="keyword">new</span> PrintWriter(socket.getOutputStream());</div><div class="line"></div><div class="line">        String input = <span class="string">""</span>;</div><div class="line">        String output = <span class="string">""</span>;</div><div class="line">        <span class="keyword">while</span> (!input.contains(<span class="string">"bye"</span>) &amp;&amp; !output.contains(<span class="string">"bye"</span>)) &#123;</div><div class="line">            input = reader.readLine();</div><div class="line">            System.out.println(<span class="string">"Client: "</span> + input);</div><div class="line"></div><div class="line">            BufferedReader sysIn = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</div><div class="line">            output = sysIn.readLine();</div><div class="line">            writer.println(output);</div><div class="line">            writer.flush();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        reader.close();</div><div class="line">        writer.close();</div><div class="line">        socket.close();</div><div class="line">        System.out.println(<span class="string">"与客户端连接断开！"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            execute(socket);</div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;&#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>用线程池实现并发<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerPool</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            ServerSocket server = <span class="keyword">new</span> ServerSocket(<span class="number">3600</span>);</div><div class="line">            ExecutorService pool = Executors.newFixedThreadPool(<span class="number">2</span>);</div><div class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</div><div class="line">                Socket socket = server.accept();</div><div class="line">                System.out.println(<span class="string">"与客户端连接成功！"</span>);</div><div class="line">                ServerThread serverThread = <span class="keyword">new</span> ServerThread(socket);</div><div class="line">                pool.submit(serverThread);</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;&#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag">#java</a>
+          
+            <a href="/tags/socket/" rel="tag">#socket</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/19/使用Git管理项目/" rel="next" title="使用Git管理项目">
+                <i class="fa fa-chevron-left"></i> 使用Git管理项目
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/28/java-sockets源码一瞥/"
+           data-title="java sockets源码一瞥" data-url="http://yoursite.com/2016/07/28/java-sockets源码一瞥/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/header.jpg"
+               alt="ChihMinh" />
+          <p class="site-author-name" itemprop="name">ChihMinh</p>
+          <p class="site-description motion-element" itemprop="description">Personal blog.</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ChihMinh/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-sockets源码分析"><span class="nav-number">2.</span> <span class="nav-text">Java sockets源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Socket和ServerSocket"><span class="nav-number">2.1.</span> <span class="nav-text">Socket和ServerSocket</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SocketImpl的类图"><span class="nav-number">2.2.</span> <span class="nav-text">SocketImpl的类图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-实现客户端与服务端通信"><span class="nav-number">3.</span> <span class="nav-text">socket 实现客户端与服务端通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多个客户端与服务端通信"><span class="nav-number">4.</span> <span class="nav-text">多个客户端与服务端通信</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ChihMinh</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"chihminh"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
