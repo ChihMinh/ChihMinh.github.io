@@ -84,30 +84,24 @@
 
 
 
-<meta name="description" content="作者ChihMinh，原作链接，转载请注明出处
-前言一个IP地址和一个端口号称为一个套接字（socket）。此术语出现在最早的TCP规范（RFC793, Page 5）中，后来也作为伯克利版的编程接口。Berkeley套接字应用程序接口形成了事实上的网络套接字的标准精髓,以下列表是一个Berkeley套接字API库提供的函数或者方法的概要:
+<meta name="description" content="作者ChihMinh，原作链接https://chihminh.github.io/2016/07/28/java-socket-sc/，转载请注明出处
 
-
-socket() 创建一个新的确定类型的套接字，类">
+前言一个IP地址和一个端口号称为一个套接字（socket）。此术语出现在最早的TCP规范（RFC793, Page 5）中，后来也作为伯克利版的编程接口。Berkeley套接字应用程序接口形成了事实上的网络套接字的标准精髓,以下列表是一个Be">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java sockets源码一瞥">
 <meta property="og:url" content="http://yoursite.com/2016/07/28/java-socket-sc/index.html">
 <meta property="og:site_name" content="天明">
-<meta property="og:description" content="作者ChihMinh，原作链接，转载请注明出处
-前言一个IP地址和一个端口号称为一个套接字（socket）。此术语出现在最早的TCP规范（RFC793, Page 5）中，后来也作为伯克利版的编程接口。Berkeley套接字应用程序接口形成了事实上的网络套接字的标准精髓,以下列表是一个Berkeley套接字API库提供的函数或者方法的概要:
+<meta property="og:description" content="作者ChihMinh，原作链接https://chihminh.github.io/2016/07/28/java-socket-sc/，转载请注明出处
 
-
-socket() 创建一个新的确定类型的套接字，类">
+前言一个IP地址和一个端口号称为一个套接字（socket）。此术语出现在最早的TCP规范（RFC793, Page 5）中，后来也作为伯克利版的编程接口。Berkeley套接字应用程序接口形成了事实上的网络套接字的标准精髓,以下列表是一个Be">
 <meta property="og:image" content="http://yoursite.com/images/socket.png">
 <meta property="og:image" content="http://yoursite.com/images/socketimpl.png">
-<meta property="og:updated_time" content="2016-08-08T16:22:21.017Z">
+<meta property="og:updated_time" content="2016-08-08T16:28:36.296Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java sockets源码一瞥">
-<meta name="twitter:description" content="作者ChihMinh，原作链接，转载请注明出处
-前言一个IP地址和一个端口号称为一个套接字（socket）。此术语出现在最早的TCP规范（RFC793, Page 5）中，后来也作为伯克利版的编程接口。Berkeley套接字应用程序接口形成了事实上的网络套接字的标准精髓,以下列表是一个Berkeley套接字API库提供的函数或者方法的概要:
+<meta name="twitter:description" content="作者ChihMinh，原作链接https://chihminh.github.io/2016/07/28/java-socket-sc/，转载请注明出处
 
-
-socket() 创建一个新的确定类型的套接字，类">
+前言一个IP地址和一个端口号称为一个套接字（socket）。此术语出现在最早的TCP规范（RFC793, Page 5）中，后来也作为伯克利版的编程接口。Berkeley套接字应用程序接口形成了事实上的网络套接字的标准精髓,以下列表是一个Be">
 <meta name="twitter:image" content="http://yoursite.com/images/socket.png">
 
 
@@ -338,9 +332,9 @@ socket() 创建一个新的确定类型的套接字，类">
 
       
         <blockquote>
-<p>作者ChihMinh，原作链接，转载请注明出处</p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>一个IP地址和一个端口号称为一个套接字（socket）。此术语出现在最早的TCP规范（<a href="https://tools.ietf.org/html/rfc793" target="_blank" rel="external">RFC793</a>, Page 5）中，后来也作为<a href="https://zh.wikipedia.org/wiki/Berkeley%E5%A5%97%E6%8E%A5%E5%AD%97" target="_blank" rel="external">伯克利版的编程接口</a>。Berkeley套接字应用程序接口形成了事实上的网络套接字的标准精髓,以下列表是一个Berkeley套接字API库提供的函数或者方法的概要:</p>
+<p>作者ChihMinh，原作链接<a href="https://chihminh.github.io/2016/07/28/java-socket-sc/" target="_blank" rel="external">https://chihminh.github.io/2016/07/28/java-socket-sc/</a>，转载请注明出处</p>
 </blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>一个IP地址和一个端口号称为一个套接字（socket）。此术语出现在最早的TCP规范（<a href="https://tools.ietf.org/html/rfc793" target="_blank" rel="external">RFC793</a>, Page 5）中，后来也作为<a href="https://zh.wikipedia.org/wiki/Berkeley%E5%A5%97%E6%8E%A5%E5%AD%97" target="_blank" rel="external">伯克利版的编程接口</a>。Berkeley套接字应用程序接口形成了事实上的网络套接字的标准精髓,以下列表是一个Berkeley套接字API库提供的函数或者方法的概要:</p>
 <ul>
 <li>socket() 创建一个新的确定类型的套接字，类型用一个整型数值标识（文件描述符），并为它分配系统资源。</li>
 <li>bind() 一般用于服务器端，将一个套接字与一个套接字地址结构相关联，比如，一个指定的本地端口和IP地址。</li>
