@@ -1,0 +1,690 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,序列化," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="作者ChihMinh，原作链接https://chihminh.github.io/2016/08/10/serializable/，转载请注明出处
+什么是序列化？将对象编码为字节流，该字节流能描述对象的类、版本信息、内部状态。最重要的一点就是对象的内部状态，即对象的所有fields，但不包括transient和static修饰的域。一言以蔽之：序列化即以某种媒介存储（以字节流的形式）对象的状态">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 序列化">
+<meta property="og:url" content="http://yoursite.com/2016/08/10/serializable/index.html">
+<meta property="og:site_name" content="天明">
+<meta property="og:description" content="作者ChihMinh，原作链接https://chihminh.github.io/2016/08/10/serializable/，转载请注明出处
+什么是序列化？将对象编码为字节流，该字节流能描述对象的类、版本信息、内部状态。最重要的一点就是对象的内部状态，即对象的所有fields，但不包括transient和static修饰的域。一言以蔽之：序列化即以某种媒介存储（以字节流的形式）对象的状态">
+<meta property="og:updated_time" content="2016-08-16T16:49:21.918Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 序列化">
+<meta name="twitter:description" content="作者ChihMinh，原作链接https://chihminh.github.io/2016/08/10/serializable/，转载请注明出处
+什么是序列化？将对象编码为字节流，该字节流能描述对象的类、版本信息、内部状态。最重要的一点就是对象的内部状态，即对象的所有fields，但不包括transient和static修饰的域。一言以蔽之：序列化即以某种媒介存储（以字节流的形式）对象的状态">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6309728711868417000,
+      author: '博主大人'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/08/10/serializable/"/>
+
+  <title> Java 序列化 | 天明 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">天明</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java 序列化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-10T16:50:36+08:00" content="2016-08-10">
+              2016-08-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java基础/" itemprop="url" rel="index">
+                    <span itemprop="name">Java基础</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/10/serializable/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/10/serializable/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>作者ChihMinh，原作链接<a href="https://chihminh.github.io/2016/07/28/java-socket-sc/" target="_blank" rel="external">https://chihminh.github.io/2016/08/10/serializable/</a>，转载请注明出处</p>
+<h2 id="什么是序列化？"><a href="#什么是序列化？" class="headerlink" title="什么是序列化？"></a>什么是序列化？</h2><p>将对象编码为字节流，该字节流能描述对象的类、版本信息、内部状态。最重要的一点就是对象的内部状态，即对象的所有fields，但不包括transient和static修饰的域。一言以蔽之：序列化即以某种媒介存储（以字节流的形式）对象的状态信息，反序列化即从字节流恢复状态信息。</p>
+<h2 id="为什么要序列化？"><a href="#为什么要序列化？" class="headerlink" title="为什么要序列化？"></a>为什么要序列化？</h2><p>参考内容原文见<a href="http://stackoverflow.com/questions/2232759/what-is-the-purpose-of-serialization-in-java" target="_blank" rel="external">这里</a></p>
+<ul>
+<li>Communication: If you have two machines that are running the same code, and they need to communicate, an easy way is for one machine to build an object with information that it would like to transmit, and then serialize that object to the other machine. It’s not the best method for communication, but it gets the job done.  </li>
+<li>Persistence: If you want to store the state of a particular operation in a database, it can be easily serialized to a byte array, and stored in the database for later retrieval.  </li>
+<li>Deep Copy: If you need an exact replica of an Object, and don’t want to go to the trouble of writing your own specialized clone() class, simply serializing the object to a byte array, and then de-serializing it to another object achieves this goal.  </li>
+<li>Caching: Really just an application of the above, but sometimes an object takes 10 minutes to build, but would only take 10 seconds to de-serialize. So, rather than hold onto the giant object in memory, just cache it out to a file via serialization, and read it in later when it’s needed.  </li>
+<li>Cross JVM Synchronization: Serialization works across different JVMs that may be running on different architectures.</li>
+</ul>
+</blockquote>
+<ul>
+<li>通信：如果两台机器运行相同的代码需要进行通信，可以把一个对象序列化然后传送到另一台机器，尽管这不是通信的最好方法。</li>
+<li>持久化：将对象保存到文件中或者数据库中。</li>
+<li>深复制：不需要自己重写Object.clone()方法，只需要序列化和反序列化就能做到</li>
+<li>缓存：如果生成某个对象很费时，而反序列化又很快，那么完全可以将一个对象序列化存到本地文件，在需要的时候进行反序列化。</li>
+<li>跨JVM同步：序列化与反序列化都是JVM独立的，也就是可以在一个平台上序列化的对象可以在另一个完全不同的平台上反序列化该对象。</li>
+</ul>
+<p>总结为：<font color="red">将对象编码为字节流写进文件或者在不同的JVM之间传输</font>。</p>
+<h2 id="怎样序列化？"><a href="#怎样序列化？" class="headerlink" title="怎样序列化？"></a>怎样序列化？</h2><p>一个类实现Serializable接口即可序列化，Serializable接口没有任何变量和方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Serializable</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="static及transicnt修饰的变量"><a href="#static及transicnt修饰的变量" class="headerlink" title="static及transicnt修饰的变量"></a>static及transicnt修饰的变量</h3><p>static<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Human</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String staticField;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> String finalField = <span class="string">"final"</span>;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String staticFinalField =<span class="string">"static&amp;final"</span>;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">transient</span> String transientField;</div><div class="line"></div><div class="line">    <span class="comment">// 省略private属性的setter和getter方法</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="comment">// 设置序列化之前的属性</span></div><div class="line">        Human human = <span class="keyword">new</span> Human();</div><div class="line">        human.setAge(<span class="number">10</span>);</div><div class="line">        Human.staticField = <span class="string">"static_before_serialize"</span>;</div><div class="line">        human.transientField = <span class="string">"transient"</span>;</div><div class="line">        System.out.println(<span class="string">"序列化之前的对象："</span>);</div><div class="line">        System.out.println(<span class="string">"Age is: "</span> + human.getAge());</div><div class="line">        System.out.println(<span class="string">"Static field is: "</span> + Human.staticField);</div><div class="line">        System.out.println(<span class="string">"Final field is: "</span> + human.finalField);</div><div class="line">        System.out.println(<span class="string">"Static final field is : "</span> + Human.staticFinalField);</div><div class="line">        System.out.println(<span class="string">"Transient field is: "</span> + human.transientField);</div><div class="line"></div><div class="line">        <span class="comment">//序列化</span></div><div class="line">        File file = <span class="keyword">new</span> File(<span class="string">"out.txt"</span>);</div><div class="line">        FileOutputStream fos = <span class="keyword">null</span>;</div><div class="line">        ObjectOutputStream oos = <span class="keyword">null</span>;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            fos = <span class="keyword">new</span> FileOutputStream(file);</div><div class="line">            oos = <span class="keyword">new</span> ObjectOutputStream(fos);</div><div class="line">            oos.writeObject(human);</div><div class="line">            oos.flush();</div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                oos.close();</div><div class="line">                fos.close();</div><div class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                System.out.println(<span class="string">"关闭写入失败"</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// 序列化之后反序列化之前改变静态变量的值</span></div><div class="line">        Human.staticField = <span class="string">"static_after_serialize"</span>;</div><div class="line"></div><div class="line">        <span class="comment">// 进行反序列化</span></div><div class="line">        FileInputStream fis = <span class="keyword">null</span>;</div><div class="line">        ObjectInputStream ois = <span class="keyword">null</span>;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            fis = <span class="keyword">new</span> FileInputStream(file);</div><div class="line">            ois = <span class="keyword">new</span> ObjectInputStream(fis);</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                Human human01 = (Human)ois.readObject();</div><div class="line">                System.out.println(<span class="string">"反序列化之后的对象："</span>);</div><div class="line">                System.out.println(<span class="string">"Age is: "</span> + human01.getAge());</div><div class="line">                System.out.println(<span class="string">"Static field is: "</span> + Human.staticField);</div><div class="line">                System.out.println(<span class="string">"Final field is: "</span> + human01.finalField);</div><div class="line">                System.out.println(<span class="string">"Static final field is: "</span> + Human.staticFinalField);</div><div class="line">                System.out.println(<span class="string">"Transient field is: "</span> + human01.transientField);</div><div class="line">            &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line"></div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                ois.close();</div><div class="line">                fis.close();</div><div class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                System.out.println(<span class="string">"关闭读取失败"</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">序列化之前的对象：</div><div class="line">Age is: 10</div><div class="line">Static field is: static_before_serialize</div><div class="line">Final field is: final</div><div class="line">Static final field is : static&amp;final</div><div class="line">Transient field is: transient</div><div class="line">反序列化之后的对象：</div><div class="line">Age is: 10</div><div class="line">Static field is: static_after_serialize</div><div class="line">Final field is: final</div><div class="line">Static final field is: static&amp;final</div><div class="line">Transient field is: null</div></pre></td></tr></table></figure></p>
+<p>可以看到反序列化之后的static变量已经改变，transient关键字修饰的变为默认的null。事实上就是序列化过程中不会保存static和transient修饰的变量的值，当然也不会保存访问修饰符（public, private, protected, 默认）信息。</p>
+<h3 id="序列化与继承关系"><a href="#序列化与继承关系" class="headerlink" title="序列化与继承关系"></a>序列化与继承关系</h3><h4 id="子类实现Serializable接口"><a href="#子类实现Serializable接口" class="headerlink" title="子类实现Serializable接口"></a>子类实现Serializable接口</h4><p>根据Serializable规范【Java SE 8】</p>
+<blockquote>
+<p>To allow subtypes of non-serializable classes to be serialized, the subtype may assume responsibility for saving and restoring the state of the supertype’s public, protected, and (if accessible) package fields.  The subtype may assume this responsibility only if the class it extends has an accessible no-arg constructor to initialize the class’s state.  It is an error to declare a class Serializable if this is not the case.  The error will be detected at runtime.  </p>
+</blockquote>
+<p>那么分两种情况：</p>
+<h4 id="父类没有实现Serializable接口"><a href="#父类没有实现Serializable接口" class="headerlink" title="父类没有实现Serializable接口"></a>父类没有实现Serializable接口</h4><p>那么序列化子类时，父类有、子类没有的属性不会被写到字节流中去，对应地反序列化时对这些属性不能从字节流中读取出来，只能（隐式）调用父类的无参构造器对这些属性初始化。<font color="red">这就要求序列化子类的未序列化父类必须要有无参构造器</font>。<br>父类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Super</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> String publicField;</div><div class="line">    <span class="keyword">private</span> String privateField;</div><div class="line">    <span class="keyword">protected</span> String protectedField;</div><div class="line">    String packField;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Super</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.publicField = <span class="string">"noArgPub"</span>;</div><div class="line">        <span class="keyword">this</span>.privateField = <span class="string">"noArgPri"</span>;</div><div class="line">        <span class="keyword">this</span>.protectedField = <span class="string">"noArgPro"</span>;</div><div class="line">        <span class="keyword">this</span>.packField = <span class="string">"noArgPac"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Super</span><span class="params">(String publicField, String privateField, String protectedField, String packField)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.publicField = publicField;</div><div class="line">        <span class="keyword">this</span>.privateField = privateField;</div><div class="line">        <span class="keyword">this</span>.protectedField = protectedField;</div><div class="line">        <span class="keyword">this</span>.packField = packField;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String  <span class="title">getPrivateField</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> privateField;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>子类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Sub</span> <span class="keyword">extends</span>  <span class="title">Super</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID =<span class="number">1L</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> String subField;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Sub</span><span class="params">(String superPublic, String superPrivate, String superProtected, String superPackage)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(superPublic, superPrivate, superProtected, superPackage);</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>序列化与反序列化<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Serialize</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="comment">// 给父类进行初始化</span></div><div class="line">        Sub sub = <span class="keyword">new</span> Sub(<span class="string">"public"</span>, <span class="string">"private"</span>, <span class="string">"protected"</span>, <span class="string">"package"</span>);</div><div class="line">        sub.subField = <span class="string">"sub"</span>;</div><div class="line">        System.out.println(<span class="string">"被序列化的对象"</span>);</div><div class="line">        System.out.println(sub.publicField);</div><div class="line">        System.out.println(sub.protectedField);</div><div class="line">        System.out.println(sub.getPrivateField());</div><div class="line">        System.out.println(sub.packField);</div><div class="line">        System.out.println(sub.subField);</div><div class="line"></div><div class="line">        <span class="comment">//序列化</span></div><div class="line">        File file = <span class="keyword">new</span> File(<span class="string">"out.txt"</span>);</div><div class="line">        FileOutputStream fos = <span class="keyword">null</span>;</div><div class="line">        ObjectOutputStream oos = <span class="keyword">null</span>;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            fos = <span class="keyword">new</span> FileOutputStream(file);</div><div class="line">            oos = <span class="keyword">new</span> ObjectOutputStream(fos);</div><div class="line">            oos.writeObject(sub);</div><div class="line">            oos.flush();</div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                oos.close();</div><div class="line">                fos.close();</div><div class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                System.out.println(<span class="string">"关闭写入失败"</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// 进行反序列化</span></div><div class="line">        FileInputStream fis = <span class="keyword">null</span>;</div><div class="line">        ObjectInputStream ois = <span class="keyword">null</span>;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            fis = <span class="keyword">new</span> FileInputStream(file);</div><div class="line">            ois = <span class="keyword">new</span> ObjectInputStream(fis);</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                Sub sub1 = (Sub)ois.readObject();</div><div class="line">                System.out.println(<span class="string">"反序列化生成的对象"</span>);</div><div class="line">                System.out.println(sub1.publicField);</div><div class="line">                System.out.println(sub1.protectedField);</div><div class="line">                System.out.println(sub1.getPrivateField());</div><div class="line">                System.out.println(sub1.packField);</div><div class="line">                System.out.println(sub1.subField);</div><div class="line"></div><div class="line">            &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line"></div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                ois.close();</div><div class="line">                fis.close();</div><div class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                System.out.println(<span class="string">"关闭读取失败"</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>输出结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">被序列化的对象</div><div class="line">public</div><div class="line">protected</div><div class="line">private</div><div class="line">package</div><div class="line">sub</div><div class="line">反序列化生成的对象</div><div class="line">noArgPub</div><div class="line">noArgPro</div><div class="line">noArgPri</div><div class="line">noArgPac</div><div class="line">sub</div></pre></td></tr></table></figure></p>
+<p>可以看到父类所有属性都是通过调用无参构造器初始化的。<br>注释掉子类和父类的无参构造器，再运行程序会出现下面异常。最终问题出在“Sub sub1 = (Sub)ois.readObject()”，反序列化的时候。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">java.io.InvalidClassException: serialize.Sub; no valid constructor</div><div class="line">    at java.io.ObjectStreamClass$ExceptionInfo.newInvalidClassException(ObjectStreamClass.java:150)</div><div class="line">    at java.io.ObjectStreamClass.checkDeserialize(ObjectStreamClass.java:768)</div><div class="line">    at java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:1772)</div><div class="line">    at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1350)</div><div class="line">    at java.io.ObjectInputStream.readObject(ObjectInputStream.java:370)</div><div class="line">    at serialize.Serialize.main(Serialize.java:51)</div><div class="line">    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</div><div class="line">    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)</div><div class="line">    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)</div><div class="line">    at java.lang.reflect.Method.invoke(Method.java:606)</div><div class="line">    at com.intellij.rt.execution.application.AppMain.main(AppMain.java:144)</div></pre></td></tr></table></figure></p>
+<h4 id="父类实现了Serializable接口"><a href="#父类实现了Serializable接口" class="headerlink" title="父类实现了Serializable接口"></a>父类实现了Serializable接口</h4><p>使上述代码中的Super类实现Serializable接口，则结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">被序列化的对象</div><div class="line">public</div><div class="line">protected</div><div class="line">private</div><div class="line">package</div><div class="line">sub</div><div class="line">反序列化生成的对象</div><div class="line">public</div><div class="line">protected</div><div class="line">private</div><div class="line">package</div><div class="line">sub</div></pre></td></tr></table></figure></p>
+<p><font color="red">如果父类也实现了Serializable接口，那么序列化子类时会把父类的所有属性（包括私有属性）全都序列化，父类有没有无参构造器都没有关系。</font></p>
+<h4 id="父类实现Serializable接口，子类没有"><a href="#父类实现Serializable接口，子类没有" class="headerlink" title="父类实现Serializable接口，子类没有"></a>父类实现Serializable接口，子类没有</h4><p>根据Serializable规范【Java SE 8】</p>
+<blockquote>
+<p>Serializability of a class is enabled by the class implementing the java.io.Serializable interface. Classes that do not implement this interface will not have any of their state serialized or deserialized.  All subtypes of a serializable class are themselves serializable.  The serialization interface has no methods or fields and serves only to identify the semantics of being serializable.</p>
+</blockquote>
+<p>所有可序列化类的子类都是可序列化的，包括父类中没有的属性。<br>将上述代码中的子类和父类是否实现Serializable接口互换一下，结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">被序列化的对象</div><div class="line">public</div><div class="line">protected</div><div class="line">private</div><div class="line">package</div><div class="line">sub</div><div class="line">反序列化生成的对象</div><div class="line">public</div><div class="line">protected</div><div class="line">private</div><div class="line">package</div><div class="line">sub</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag">#java</a>
+          
+            <a href="/tags/序列化/" rel="tag">#序列化</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/08/heap-sort/" rel="next" title="堆排序">
+                <i class="fa fa-chevron-left"></i> 堆排序
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/10/serializable/"
+           data-title="Java 序列化" data-url="http://yoursite.com/2016/08/10/serializable/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/header.jpg"
+               alt="ChihMinh" />
+          <p class="site-author-name" itemprop="name">ChihMinh</p>
+          <p class="site-description motion-element" itemprop="description">Personal blog.</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ChihMinh/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是序列化？"><span class="nav-number">1.</span> <span class="nav-text">什么是序列化？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要序列化？"><span class="nav-number">2.</span> <span class="nav-text">为什么要序列化？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#怎样序列化？"><span class="nav-number">3.</span> <span class="nav-text">怎样序列化？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#static及transicnt修饰的变量"><span class="nav-number">3.1.</span> <span class="nav-text">static及transicnt修饰的变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#序列化与继承关系"><span class="nav-number">3.2.</span> <span class="nav-text">序列化与继承关系</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#子类实现Serializable接口"><span class="nav-number">3.2.1.</span> <span class="nav-text">子类实现Serializable接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#父类没有实现Serializable接口"><span class="nav-number">3.2.2.</span> <span class="nav-text">父类没有实现Serializable接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#父类实现了Serializable接口"><span class="nav-number">3.2.3.</span> <span class="nav-text">父类实现了Serializable接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#父类实现Serializable接口，子类没有"><span class="nav-number">3.2.4.</span> <span class="nav-text">父类实现Serializable接口，子类没有</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ChihMinh</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"chihminh"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
