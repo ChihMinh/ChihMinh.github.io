@@ -85,18 +85,21 @@
 
 
 <meta name="description" content="作者ChihMinh，原作链接https://chihminh.github.io/2016/08/10/serializable/，转载请注明出处
-什么是序列化？将对象编码为字节流，该字节流能描述对象的类、版本信息、内部状态。最重要的一点就是对象的内部状态，即对象的所有fields，但不包括transient和static修饰的域。一言以蔽之：序列化即以某种媒介存储（以字节流的形式）对象的状态">
+
+什么是序列化？将对象编码为字节流，该字节流能描述对象的类、版本信息、内部状态。最重要的一点就是对象的内部状态，即对象的所有fields，但不包括transient和static修饰的域。一言以蔽之：序列化即以某种媒介存储（以字节流的形式）对象的状">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 序列化">
 <meta property="og:url" content="http://yoursite.com/2016/08/10/serializable/index.html">
 <meta property="og:site_name" content="天明">
 <meta property="og:description" content="作者ChihMinh，原作链接https://chihminh.github.io/2016/08/10/serializable/，转载请注明出处
-什么是序列化？将对象编码为字节流，该字节流能描述对象的类、版本信息、内部状态。最重要的一点就是对象的内部状态，即对象的所有fields，但不包括transient和static修饰的域。一言以蔽之：序列化即以某种媒介存储（以字节流的形式）对象的状态">
-<meta property="og:updated_time" content="2016-08-17T03:55:31.023Z">
+
+什么是序列化？将对象编码为字节流，该字节流能描述对象的类、版本信息、内部状态。最重要的一点就是对象的内部状态，即对象的所有fields，但不包括transient和static修饰的域。一言以蔽之：序列化即以某种媒介存储（以字节流的形式）对象的状">
+<meta property="og:updated_time" content="2016-08-17T04:37:46.015Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 序列化">
 <meta name="twitter:description" content="作者ChihMinh，原作链接https://chihminh.github.io/2016/08/10/serializable/，转载请注明出处
-什么是序列化？将对象编码为字节流，该字节流能描述对象的类、版本信息、内部状态。最重要的一点就是对象的内部状态，即对象的所有fields，但不包括transient和static修饰的域。一言以蔽之：序列化即以某种媒介存储（以字节流的形式）对象的状态">
+
+什么是序列化？将对象编码为字节流，该字节流能描述对象的类、版本信息、内部状态。最重要的一点就是对象的内部状态，即对象的所有fields，但不包括transient和static修饰的域。一言以蔽之：序列化即以某种媒介存储（以字节流的形式）对象的状">
 
 
 
@@ -327,8 +330,10 @@
       
         <blockquote>
 <p>作者ChihMinh，原作链接<a href="https://chihminh.github.io/2016/07/28/java-socket-sc/" target="_blank" rel="external">https://chihminh.github.io/2016/08/10/serializable/</a>，转载请注明出处</p>
+</blockquote>
 <h1 id="什么是序列化？"><a href="#什么是序列化？" class="headerlink" title="什么是序列化？"></a>什么是序列化？</h1><p>将对象编码为字节流，该字节流能描述对象的类、版本信息、内部状态。最重要的一点就是对象的内部状态，即对象的所有fields，但不包括transient和static修饰的域。一言以蔽之：序列化即以某种媒介存储（以字节流的形式）对象的状态信息，反序列化即从字节流恢复状态信息。</p>
 <h1 id="为什么要序列化？"><a href="#为什么要序列化？" class="headerlink" title="为什么要序列化？"></a>为什么要序列化？</h1><p>参考内容原文见<a href="http://stackoverflow.com/questions/2232759/what-is-the-purpose-of-serialization-in-java" target="_blank" rel="external">这里</a></p>
+<blockquote>
 <ul>
 <li>Communication: If you have two machines that are running the same code, and they need to communicate, an easy way is for one machine to build an object with information that it would like to transmit, and then serialize that object to the other machine. It’s not the best method for communication, but it gets the job done.  </li>
 <li>Persistence: If you want to store the state of a particular operation in a database, it can be easily serialized to a byte array, and stored in the database for later retrieval.  </li>
