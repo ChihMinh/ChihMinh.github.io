@@ -90,7 +90,7 @@
 
 Access level modifiers determine whether other classes can use a particular field or invoke a particular method. Th">
 <meta property="og:type" content="article">
-<meta property="og:title" content="天明">
+<meta property="og:title" content="Java访问修饰符">
 <meta property="og:url" content="http://yoursite.com/2016/08/28/modifier/index.html">
 <meta property="og:site_name" content="天明">
 <meta property="og:description" content="作者ChihMinh，原作链接https://chihminh.github.io/2016/08/28/modifier/，转载请注明出处  
@@ -103,9 +103,9 @@ Access level modifiers determine whether other classes can use a particular fiel
 <meta property="og:image" content="http://yoursite.com/images/m01.png">
 <meta property="og:image" content="http://yoursite.com/images/m02.png">
 <meta property="og:image" content="http://yoursite.com/images/m03.png">
-<meta property="og:updated_time" content="2016-08-28T15:23:13.877Z">
+<meta property="og:updated_time" content="2016-08-31T08:54:08.099Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="天明">
+<meta name="twitter:title" content="Java访问修饰符">
 <meta name="twitter:description" content="作者ChihMinh，原作链接https://chihminh.github.io/2016/08/28/modifier/，转载请注明出处  
 
 根据Java文档
@@ -134,7 +134,7 @@ Access level modifiers determine whether other classes can use a particular fiel
 
   <link rel="canonical" href="http://yoursite.com/2016/08/28/modifier/"/>
 
-  <title>  | 天明 </title>
+  <title> Java访问修饰符 | 天明 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -274,7 +274,7 @@ Access level modifiers determine whether other classes can use a particular fiel
             
             
               
-                
+                Java访问修饰符
               
             
           </h1>
@@ -351,7 +351,7 @@ Access level modifiers determine whether other classes can use a particular fiel
 <li>At the member level—public, private, protected, or package-private (no explicit modifier).</li>
 </ul>
 </blockquote>
-<p>即访问修饰符决定一个类能够调用别的类的特定域或者方法，分顶层修饰符和成员修饰符。  顶级访问修饰符修饰类名或者接口名，无修饰符的话就算是只能包内访问。<br>以下是成员级别的访问控制符的控制范围<br><img src="/images/modifier.png" alt=""><br>注意访问修饰符是基于类的控制权限，不是对象级别的，比如说一个方法可以访问所属类的所有对象的私有方法，参考《Java核心技术 卷一》<br><img src="/images/private.png" alt="">  </p>
+<p>即访问修饰符决定一个类能够调用别的类的特定域或者方法，分顶级修饰符和成员修饰符。  顶级访问修饰符修饰类名或者接口名，默认无修饰符是包内访问。<br>以下是成员级别的访问修饰符的控制范围<br><img src="/images/modifier.png" alt=""><br>注意访问修饰符是基于类的控制权限，不是对象级别的，比如说一个方法可以访问所属类的所有对象的私有方法，参考《Java核心技术 卷一》<br><img src="/images/private.png" alt="">  </p>
 <p>下面按照普通类、抽象类、接口来总结。</p>
 <h2 id="普通类"><a href="#普通类" class="headerlink" title="普通类"></a>普通类</h2><p>所有访问修饰符可修饰成员变量、成员方法、构造器。<br>类名只能由public修饰，或者默认没有（只能从包内访问类）。<br><img src="/images/m01.png" alt=""></p>
 <h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><p>成员变量默认是public static final 修饰，不用显示修饰。<br>方法默认是public abstract修饰。<br>接口 由public修饰或者默认没有（只能包内访问）。<br><img src="/images/m02.png" alt=""></p>
@@ -427,7 +427,7 @@ Access level modifiers determine whether other classes can use a particular fiel
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2016/08/28/modifier/"
-           data-title="" data-url="http://yoursite.com/2016/08/28/modifier/">
+           data-title="Java访问修饰符" data-url="http://yoursite.com/2016/08/28/modifier/">
       </div>
     
   </div>
